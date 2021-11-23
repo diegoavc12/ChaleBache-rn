@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { Accelerometer } from "expo-sensors";
 
 const THRESHOLD = 150;
@@ -16,7 +16,8 @@ const addListener = (handler) => {
       let speed =
         (Math.abs(x + y + z - prevX - prevY - prevZ) / diffTime) * 10000;
       if (speed > THRESHOLD) {
-        console.log("SHAKE!!!");
+        console.log("Pothole Detected!");
+        Alert.alert("Pothole Detected!")
       }
       prevX = x;
       prevY = y;

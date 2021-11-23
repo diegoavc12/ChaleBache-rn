@@ -29,7 +29,7 @@ export default function TabOneScreen() {
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
       <View>
         {/* <Text>On</Text> */}
-        <Loc />
+        {/* <Loc /> */}
         <Detect/>
         <PotholeEvent/>
       </View>

@@ -48,8 +48,8 @@ const Detect = () => {
       <Text>
         x :{x.toFixed(4)} y:{y.toFixed(4)} z:{z.toFixed(4)}
       </Text>
-      <Button
-        title={subscription ? "ON" : "OFF"}
+      <Button 
+        title={subscription ? "OFF" : "ON"}
         onPress={subscription ? _unsubscribre : _subscribe}
       />
       {/* <Button onPress={_fast} title="fast" /> */}
@@ -78,5 +78,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "blue",
   },
+  btnON:{
+    fontSize:20
+  }
 });
 //

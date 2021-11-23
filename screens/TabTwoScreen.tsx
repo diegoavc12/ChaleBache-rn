@@ -61,7 +61,7 @@ const DATA = [
   },
   {
     id: '9',
-    title: 'Adolfo Miclaco',
+    title: 'Diego Miclaco',
   },
   {
     id: '10',
