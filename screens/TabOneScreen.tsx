@@ -7,13 +7,20 @@ import { RootTabScreenProps } from "../types";
 import Loc from "../components/Loc";
 import Detect from "../components/Detect";
 import PotholeEvent from "../components/PotholeEvent";
+import {WeatherWidget} from 'react-native-weather'
+
 // export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 // }
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      {/* <Text style={styles.title}>Tab One</Text> */}
+       <WeatherWidget
+      api={"your-DarkSky.net-api-here"}
+      lat={"20.6969"}
+      lng={"20.6969"}
+      />
       <View
         style={styles.separator}
         lightColor="#eee"
