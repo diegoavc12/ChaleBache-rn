@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert } from "react-native";
 import { Accelerometer } from "expo-sensors";
 
-const THRESHOLD = 150;
+const THRESHOLD = 130;
 
 const addListener = (handler) => {
   let prevX, prevY, prevZ;
@@ -18,6 +18,9 @@ const addListener = (handler) => {
       if (speed > THRESHOLD) {
         console.log("Pothole Detected!");
         Alert.alert("Pothole Detected!")
+        setTimeout(() => {
+          console.log("Cool down");
+        }, 2000);
       }
       prevX = x;
       prevY = y;
@@ -38,6 +41,7 @@ const PotholeEvent = () => {
     addListener();
     console.log("Shake Listener");
     return () => {
+      console.log("Removed Listener");
       removeListener();
     };
   }, []);

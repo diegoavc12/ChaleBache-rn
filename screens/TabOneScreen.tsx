@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
@@ -7,32 +7,29 @@ import { RootTabScreenProps } from "../types";
 import Loc from "../components/Loc";
 import Detect from "../components/Detect";
 import PotholeEvent from "../components/PotholeEvent";
-import {WeatherWidget} from 'react-native-weather'
-
-// export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
-// }
+import { WeatherWidget } from "react-native-weather";
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}
-       <WeatherWidget
-      api={"your-DarkSky.net-api-here"}
-      lat={"20.6969"}
-      lng={"20.6969"}
+      <WeatherWidget
+        api={"2f0b98dce3356ae266677c11184ed85a"}
+        lat={"20.6969"}
+        lng={"20.6969"}
       />
+      <Detect />
+      {/* <PotholeEvent /> */}
+
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
-      <View>
-        {/* <Text>On</Text> */}
-        {/* <Loc /> */}
-        <Detect/>
-        <PotholeEvent/>
-      </View>
+      <TouchableOpacity style={styles.button}>
+        <Text style={{ fontSize: 40 }}>Submit Pothole</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -51,5 +48,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#57b07a",
+    padding: 10,
   },
 });

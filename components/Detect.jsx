@@ -8,6 +8,10 @@ import {
   View,
 } from "react-native";
 import { Accelerometer } from "expo-sensors";
+import PotholeEvent from "../components/PotholeEvent";
+// import Toast from 'react-native-simple-toast';
+
+// Toast.show('This is a long toast.', Toast.LONG);
 
 const Detect = () => {
   const [data, setData] = useState({
@@ -43,15 +47,23 @@ const Detect = () => {
   }, []);
 
   const { x, y, z } = data;
+  const handleBtnOnOff = () => {
+    // Toast.show('This is a toast.');
+  };
+
   return (
     <View style={styles.flexContainer}>
-      <Text>
+      {/* <Text>
         x :{x.toFixed(4)} y:{y.toFixed(4)} z:{z.toFixed(4)}
-      </Text>
-      <Button 
-        title={subscription ? "OFF" : "ON"}
-        onPress={subscription ? _unsubscribre : _subscribe}
-      />
+      </Text> */}
+      <PotholeEvent />
+      <TouchableOpacity
+        style={styles.btnOnOFF}
+        // onPress={subscription ? _unsubscribre : _subscribe}
+        onPress={handleBtnOnOff}
+      >
+        <Text style={{ fontSize: 40 }}>{subscription ? "OFF" : "ON"}</Text>
+      </TouchableOpacity>
       {/* <Button onPress={_fast} title="fast" /> */}
     </View>
   );
@@ -78,8 +90,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "blue",
   },
-  btnON:{
-    fontSize:20
-  }
+  btnOnOFF: {
+    alignItems: "center",
+    backgroundColor: "#57b07a",
+    padding: 10,
+  },
 });
 //
