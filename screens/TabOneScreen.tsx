@@ -6,7 +6,6 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import Loc from "../components/Loc";
 import Detect from "../components/Detect";
-import PotholeEvent from "../components/PotholeEvent";
 import { WeatherWidget } from "react-native-weather";
 
 export default function TabOneScreen() {
@@ -19,7 +18,6 @@ export default function TabOneScreen() {
         lng={"20.6969"}
       />
       <Detect />
-      {/* <PotholeEvent /> */}
 
       <View
         style={styles.separator}
@@ -27,9 +25,6 @@ export default function TabOneScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={{ fontSize: 40 }}>Submit Pothole</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -48,10 +43,5 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#57b07a",
-    padding: 10,
   },
 });

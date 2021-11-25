@@ -67,7 +67,7 @@ function BottomTabNavigator() {
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'Detect',
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color="#57b07a" />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -88,8 +88,8 @@ function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          title: 'Leaderboard',
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          title: 'History',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color="#57b07a" />,
         }}
       />
     </BottomTab.Navigator>

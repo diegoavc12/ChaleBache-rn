@@ -5,64 +5,186 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Alert,
   View,
+  AsyncStorage,
 } from "react-native";
 import { Accelerometer } from "expo-sensors";
-import PotholeEvent from "../components/PotholeEvent";
 // import Toast from 'react-native-simple-toast';
+import * as Location from "expo-location";
 
 // Toast.show('This is a long toast.', Toast.LONG);
+const THRESHOLD = 110;
+
+const addListener = (handler) => {
+  let prevX, prevY, prevZ;
+  let lastUpdate = 0;
+  Accelerometer.addListener((accelerometerData) => {
+    let { x, y, z } = accelerometerData;
+    let currTime = Date.now();
+    if (currTime - lastUpdate > 100) {
+      let diffTime = currTime - lastUpdate;
+      lastUpdate = currTime;
+      let speed =
+        (Math.abs(x + y + z - prevX - prevY - prevZ) / diffTime) * 10000;
+      if (speed > THRESHOLD) {
+        console.log("Pothole Detected!");
+        Alert.alert("Pothole Detected!");
+        // postPotHole(location);
+      }
+      prevX = x;
+      prevY = y;
+      prevZ = z;
+    }
+  });
+};
+
+const removeListener = () => {
+  Accelerometer.removeAllListeners();
+};
+
+_storeData = async () => {
+  try {
+    await AsyncStorage.setItem("name", "John");
+  } catch (error) {
+    // Error saving data
+  }
+};
+_retrieveData = async () => {
+  try {
+    const value = await AsyncStorage.getItem("name");
+    if (value !== null) {
+      // Our data is fetched successfully
+      console.log(value);
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
+};
+
+const postPotHole = (location) => {
+  console.log("Sending Pothole POST Request");
+
+  const potHoleLoc = location.coords;
+  const potHoleDate = new Date();
+  console.log(potHoleLoc);
+  // console.log(potHoleLoc)
+
+  fetch("https://chalebache-json-server.herokuapp.com/potholes", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      firstIncident: potHoleDate.toISOString(),
+      lastIncident: potHoleDate.toISOString(),
+      numIncidents: 87125,
+      createdAt: potHoleDate.toISOString(),
+      updatedAt: potHoleDate.toISOString(),
+      lat: potHoleLoc.latitude,
+      lng: potHoleLoc.longitude,
+      __v: 0,
+    }),
+  });
+  console.log("Sent");
+};
 
 const Detect = () => {
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [subscription, setSubscription] = useState(null);
+  const [subscription, setSubscription] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  const _slow = () => {
-    Accelerometer.setUpdateInterval(1000);
-  };
-  const _fast = () => {
-    Accelerometer.setUpdateInterval(16);
-  };
-  const _subscribe = () => {
-    let prevX, prevY, prevZ;
-    let lastUpdate = 0;
-    setSubscription(
-      Accelerometer.addListener((accelerometerData) => {
-        setData(accelerometerData);
-      })
-    );
-  };
-  const _unsubscribre = () => {
-    subscription && subscription.remove();
-    setSubscription(null);
-  };
+  const getLoc = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
 
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+  };
   useEffect(() => {
-    _subscribe();
-    return () => _unsubscribre();
+    addListener();
+    getLoc();
   }, []);
+  setTimeout(() => {
+    getLoc();
+  }, 5000);
 
-  const { x, y, z } = data;
-  const handleBtnOnOff = () => {
-    // Toast.show('This is a toast.');
-  };
+  // const [data, setData] = useState({
+  //   x: 0,
+  //   y: 0,
+  //   z: 0,
+  // });
+
+  // const _slow = () => {
+  //   Accelerometer.setUpdateInterval(1000);
+  // };
+  // const _fast = () => {
+  //   Accelerometer.setUpdateInterval(16);
+  // };
+  // const _subscribe = () => {
+  //   let prevX, prevY, prevZ;
+  //   let lastUpdate = 0;
+  //   setSubscription(
+  //     Accelerometer.addListener((accelerometerData) => {
+  //       setData(accelerometerData);
+  //     })
+  //   );
+  // };
+  // const _unsubscribre = () => {
+  //   subscription && subscription.remove();
+  //   setSubscription(null);
+  // };
+
+  // useEffect(() => {
+  //   _subscribe();
+  //   return () => _unsubscribre();
+  // }, []);
+
+  // const { x, y, z } = data;
 
   return (
     <View style={styles.flexContainer}>
       {/* <Text>
         x :{x.toFixed(4)} y:{y.toFixed(4)} z:{z.toFixed(4)}
       </Text> */}
-      <PotholeEvent />
       <TouchableOpacity
         style={styles.btnOnOFF}
         // onPress={subscription ? _unsubscribre : _subscribe}
-        onPress={handleBtnOnOff}
+        onPress={() => {
+          setSubscription(!subscription);
+          if (subscription) {
+            removeListener();
+          } else {
+            addListener();
+          }
+        }}
       >
-        <Text style={{ fontSize: 40 }}>{subscription ? "OFF" : "ON"}</Text>
+        <Text style={{ fontSize: 40 }}>{subscription ? "ON" : "OFF"}</Text>
+      </TouchableOpacity>
+      <View>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          postPotHole(location);
+          // _storeData();
+          let x = _retrieveData()
+          console.log(x)
+          // savePotHole();
+        }}
+      >
+        <Text style={{ fontSize: 50 }}>Submit Pothole</Text>
       </TouchableOpacity>
       {/* <Button onPress={_fast} title="fast" /> */}
     </View>
@@ -91,6 +213,11 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
   },
   btnOnOFF: {
+    alignItems: "center",
+    backgroundColor: "#57b07a",
+    padding: 10,
+  },
+  button: {
     alignItems: "center",
     backgroundColor: "#57b07a",
     padding: 10,
