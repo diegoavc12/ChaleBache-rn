@@ -65,32 +65,66 @@ _retrieveData = async () => {
   }
 };
 
-const postPotHole = (location) => {
+ const fetchEvents = async () => {
+   const rawData = await fetch("https://chalebache-json-server.herokuapp.com/potholes");
+  const info =  await rawData.json()
+  return info;
+ }
+
+const postPotHole = async (location) => {
   console.log("Sending Pothole POST Request");
   const id =Device.brand+Device.manufacturer+Device.totalMemory;
   const potHoleLoc = location.coords;
   const potHoleDate = new Date();
+  const data = await fetchEvents();
   console.log(potHoleLoc);
-  // console.log(potHoleLoc)
-
-  fetch("https://chalebache-json-server.herokuapp.com/potholes", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      firstIncident: potHoleDate.toISOString(),
-      lastIncident: potHoleDate.toISOString(),
-      numIncidents: 87125,
-      createdAt: potHoleDate.toISOString(),
-      updatedAt: potHoleDate.toISOString(),
-      lat: potHoleLoc.latitude,
-      lng: potHoleLoc.longitude,
-      __v: 0,
-      hardwareId:id,
-    }),
+  let newData=[];
+  let equal= false;
+  data.forEach(element => {
+    if (element.lat===potHoleLoc.latitude && element.lng===potHoleLoc.longitude) {
+      element.lastIncident=potHoleDate.toISOString()
+      element.numIncidents+=1;
+      element.updatedAt=potHoleDate.toISOString()
+      newData.push(element);
+      equal=true
+    } else {
+      newData.push(element);
+    }
   });
+  //console.log(newData);
+  //console.log(equal)
+  // console.log(potHoleLoc)
+  // console.log(data)
+
+  if (equal) {
+         fetch("https://chalebache-json-server.herokuapp.com/potholes", {
+     method: "PUT",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({rawData}),
+   }); 
+  } else {
+     fetch("https://chalebache-json-server.herokuapp.com/potholes", {
+     method: "POST",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       firstIncident: potHoleDate.toISOString(),
+       lastIncident: potHoleDate.toISOString(),
+       numIncidents: 0,
+       createdAt: potHoleDate.toISOString(),
+       updatedAt: potHoleDate.toISOString(),
+       lat: potHoleLoc.latitude,
+       lng: potHoleLoc.longitude,
+       __v: 0,
+       hardwareId:id,
+     }),
+   }); 
+  }
   console.log("Sent");
   console.log(id)
 };
