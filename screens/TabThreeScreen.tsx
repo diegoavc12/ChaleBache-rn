@@ -35,8 +35,8 @@ const [data1, setdata] =useState([])
             <Marker
       key={index}
       coordinate={{ latitude : marker.lat , longitude : marker.lng }}
-      title={marker.name}
-      description={marker.createdAt}
+      title={marker.id}
+      description={marker.lastIncident}
       //image={{uri:require('./imgs/chale2.png'), width:30, height:30}}
     >
         <Image source={require('./imgs/chale3.png')} style={{height: 35, width:35 }} />
@@ -48,8 +48,8 @@ const [data1, setdata] =useState([])
             <Marker
       key={index}
       coordinate={{ latitude : marker.lat , longitude : marker.lng }}
-      title={marker.name}
-      description={marker.createdAt}
+      title={marker.id}
+      description={marker.lastIncident}
       //image={{uri:require('./imgs/chale2.png'), width:30, height:30}}
     >
         <Image source={require('./imgs/chale2.png')} style={{height: 35, width:35 }} />
