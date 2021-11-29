@@ -17,9 +17,22 @@ import AwesomeButton from "react-native-really-awesome-button";
 import * as Device from 'expo-device';
 
 // Toast.show('This is a long toast.', Toast.LONG);
-const THRESHOLD = 110;
+const THRESHOLD = 130;
 
-const addListener = (handler) => {
+const getLocN = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    return location
+  };
+
+const addListener = async (handler) => {
+  let location = await getLocN()
+  console.log("LOCATION")
+  console.log(location);
   let prevX, prevY, prevZ;
   let lastUpdate = 0;
   Accelerometer.addListener((accelerometerData) => {
@@ -33,7 +46,7 @@ const addListener = (handler) => {
       if (speed > THRESHOLD) {
         console.log("Pothole Detected!");
         Alert.alert("Pothole Detected!");
-        // postPotHole(location);
+        postPotHole(location, "Automatic");
       }
       prevX = x;
       prevY = y;
@@ -65,34 +78,68 @@ _retrieveData = async () => {
   }
 };
 
-const postPotHole = (location) => {
+ const fetchEvents = async () => {
+   const rawData = await fetch("https://chalebache-json-server.herokuapp.com/potholes");
+  const info =  await rawData.json()
+  return info;
+ }
+
+const postPotHole = async (location, type) => {
   console.log("Sending Pothole POST Request");
   const id =Device.brand+Device.manufacturer+Device.totalMemory;
   const potHoleLoc = location.coords;
   const potHoleDate = new Date();
+  const data = await fetchEvents();
   console.log(potHoleLoc);
-  // console.log(potHoleLoc)
-
-  fetch("https://chalebache-json-server.herokuapp.com/potholes", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      firstIncident: potHoleDate.toISOString(),
-      lastIncident: potHoleDate.toISOString(),
-      numIncidents: 87125,
-      createdAt: potHoleDate.toISOString(),
-      updatedAt: potHoleDate.toISOString(),
-      lat: potHoleLoc.latitude,
-      lng: potHoleLoc.longitude,
-      __v: 0,
-      hardwareId:id,
-    }),
+  let newData=[];
+  let equal= false;
+  data.forEach(element => {
+    if (element.lat===potHoleLoc.latitude && element.lng===potHoleLoc.longitude) {
+      element.lastIncident=potHoleDate.toISOString()
+      element.numIncidents+=1;
+      element.updatedAt=potHoleDate.toISOString()
+      newData.push(element);
+      equal=true
+    } else {
+      newData.push(element);
+    }
   });
+  //console.log(newData);
+  //console.log(equal)
+  // console.log(potHoleLoc)
+  // console.log(data)
+
+  if (equal) {
+         fetch("https://chalebache-json-server.herokuapp.com/potholes", {
+     method: "PUT",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({newData}),
+   }); 
+  } else {
+     fetch("https://chalebache-json-server.herokuapp.com/potholes", {
+     method: "POST",
+     headers: {
+       Accept: "application/json",
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       firstIncident: potHoleDate.toISOString(),
+       lastIncident: potHoleDate.toISOString(),
+       numIncidents: 0,
+       createdAt: potHoleDate.toISOString(),
+       updatedAt: potHoleDate.toISOString(),
+       lat: potHoleLoc.latitude,
+       lng: potHoleLoc.longitude,
+       __v: 0,
+       hardwareId:id,
+       type: type,
+     }),
+   }); 
+  }
   console.log("Sent");
-  console.log(id)
 };
 
 const Detect = () => {
@@ -110,6 +157,7 @@ const Detect = () => {
 
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
+    
   };
   useEffect(() => {
     addListener();
@@ -206,7 +254,7 @@ const Detect = () => {
       textSize={30}
       style={styles.button}
             onPress={next => {
-              postPotHole(location);
+              postPotHole(location, "Manual");
           // _storeData();
           let x = _retrieveData()
           console.log(x)

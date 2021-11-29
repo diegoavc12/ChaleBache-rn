@@ -26,7 +26,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.danielvelara.Chole"
+      "package": "com.danielvelara.Chole",
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyC12N6GgWFs4_4tGJvRLnSYo7hMG5VMCEM"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
