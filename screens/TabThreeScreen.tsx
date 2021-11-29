@@ -29,8 +29,23 @@ const [data1, setdata] =useState([])
     }}
     showsUserLocation={true}
       >
-    {data1.map((marker, index) => (
-    <Marker
+    {data1.map((marker, index) => {
+      if(marker.type==="Automatic"){
+        return(
+            <Marker
+      key={index}
+      coordinate={{ latitude : marker.lat , longitude : marker.lng }}
+      title={marker.name}
+      description={marker.createdAt}
+      //image={{uri:require('./imgs/chale2.png'), width:30, height:30}}
+    >
+        <Image source={require('./imgs/chale3.png')} style={{height: 35, width:35 }} />
+  </Marker>
+        )
+
+      } else {
+        return(
+            <Marker
       key={index}
       coordinate={{ latitude : marker.lat , longitude : marker.lng }}
       title={marker.name}
@@ -38,7 +53,10 @@ const [data1, setdata] =useState([])
       //image={{uri:require('./imgs/chale2.png'), width:30, height:30}}
     >
         <Image source={require('./imgs/chale2.png')} style={{height: 35, width:35 }} />
-  </Marker>))}
+  </Marker>
+        )
+      }
+    })}
 
     </MapView>
     </View>
