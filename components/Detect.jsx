@@ -31,7 +31,6 @@ const getLocN = async () => {
 
 const addListener = async (handler) => {
   let location = await getLocN()
-  console.log("LOCATION")
   console.log(location);
   let prevX, prevY, prevZ;
   let lastUpdate = 0;
@@ -85,39 +84,41 @@ _retrieveData = async () => {
  }
 
 const postPotHole = async (location, type) => {
-  console.log("Sending Pothole POST Request");
+  console.log("Sending Pothole UPADTE Request");
   const id =Device.brand+Device.manufacturer+Device.totalMemory;
   const potHoleLoc = location.coords;
   const potHoleDate = new Date();
   const data = await fetchEvents();
   console.log(potHoleLoc);
-  let newData=[];
+  let newData;
   let equal= false;
   data.forEach(element => {
-    if (element.lat===potHoleLoc.latitude && element.lng===potHoleLoc.longitude) {
-      element.lastIncident=potHoleDate.toISOString()
-      element.numIncidents+=1;
-      element.updatedAt=potHoleDate.toISOString()
-      newData.push(element);
-      equal=true
-    } else {
-      newData.push(element);
+    if (element.lat.toFixed(5)===potHoleLoc.latitude.toFixed(5) && element.lng.toFixed(5)===potHoleLoc.longitude.toFixed(5)) {
+      // element.lastIncident=potHoleDate.toISOString()
+      //element.numIncidents+=1;
+      // element.updatedAt=potHoleDate.toISOString()
+      newData=element;
+      equal=true;
     }
   });
   //console.log(newData);
   //console.log(equal)
   // console.log(potHoleLoc)
   // console.log(data)
-
-  if (equal) {
-         fetch("https://chalebache-json-server.herokuapp.com/potholes", {
-     method: "PUT",
+    if (equal) {
+         fetch("https://chalebache-json-server.herokuapp.com/potholes/"+newData.id, {
+     method: "PATCH",
      headers: {
        Accept: "application/json",
        "Content-Type": "application/json",
      },
-     body: JSON.stringify({newData}),
-   }); 
+     body: JSON.stringify({
+       lastIncident: potHoleDate.toISOString(),
+       numIncidents: parseInt(newData.numIncidents)+1,
+       updatedAt: potHoleDate.toISOString(),
+     }),
+   });
+   console.log("Sent PATCH");  
   } else {
      fetch("https://chalebache-json-server.herokuapp.com/potholes", {
      method: "POST",
@@ -128,7 +129,7 @@ const postPotHole = async (location, type) => {
      body: JSON.stringify({
        firstIncident: potHoleDate.toISOString(),
        lastIncident: potHoleDate.toISOString(),
-       numIncidents: 0,
+       numIncidents: 1,
        createdAt: potHoleDate.toISOString(),
        updatedAt: potHoleDate.toISOString(),
        lat: potHoleLoc.latitude,
@@ -137,9 +138,9 @@ const postPotHole = async (location, type) => {
        hardwareId:id,
        type: type,
      }),
-   }); 
+   });
+   console.log("Sent POST"); 
   }
-  console.log("Sent");
 };
 
 const Detect = () => {
