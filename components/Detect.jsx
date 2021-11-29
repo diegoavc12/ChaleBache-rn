@@ -17,7 +17,7 @@ import AwesomeButton from "react-native-really-awesome-button";
 import * as Device from 'expo-device';
 
 // Toast.show('This is a long toast.', Toast.LONG);
-const THRESHOLD = 130;
+const THRESHOLD = 140;
 
 const getLocN = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
