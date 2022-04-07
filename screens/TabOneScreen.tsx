@@ -6,18 +6,18 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import Loc from "../components/Loc";
 import Detect from "../components/Detect";
-import { WeatherWidget } from "react-native-weather";
+//import { WeatherWidget } from "react-native-weather";
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}
-      <WeatherWidget
+      {/*<WeatherWidget
         api={"2f0b98dce3356ae266677c11184ed85a"}
         lat={"20.6969"}
         lng={"20.6969"}
          style={styles.weather}
-      />
+  />*/}
       
       
       <View
