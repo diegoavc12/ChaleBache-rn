@@ -108,6 +108,7 @@ or
 ### Map
 
 - Click on any pothole pin to visualize their id and detected time
+- The user's location is displayed by a blue circle with a small triangle facing in the user's direction (This representation may vary between devices. If the application is run in an emulator the user location may not be displayed due to the emulator not having a default location configured yet.)
 
 <p align="center">
 <img src="./Images/map.jpeg" width="500">
