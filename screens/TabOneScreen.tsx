@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
@@ -8,7 +8,10 @@ import Loc from "../components/Loc";
 import Detect from "../components/Detect";
 //import { WeatherWidget } from "react-native-weather";
 
+   
+
 export default function TabOneScreen() {
+  const image = { uri: "https://www.tranbc.ca/wp-content/uploads/2011/04/pothole-2.jpg" };
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}
@@ -19,21 +22,27 @@ export default function TabOneScreen() {
          style={styles.weather}
   />*/}
       
-      
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+        <ImageBackground source={image} resizeMode="cover"  style={styles.image}>
+        
+          
 
-      <Detect />
+          <View style={{ backgroundColor: "white",borderWidth: 5, bottom:100, height:150}}>
+          <Text style={{fontSize:18, padding: 10}}>
+            Bienvenido a la app de ChaleBache. Utilice el botón redondo para activar la detección
+            automática de baches o presione el botón "Reportar Bache" para notificar que hay un bache en 
+            su ubicación actual. 
+            </Text>
+          </View >
 
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+          <Detect />
+
+          
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
+      
+        </ImageBackground>
+      
+      
+     
     </View>
   );
 }
@@ -47,6 +56,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    width: '100%',
+    height: '100%',
   },
   separator: {
     marginVertical: 30,

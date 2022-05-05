@@ -30,11 +30,14 @@ const getLocN = async () => {
   };
 
 const addListener = async (handler) => {
+  console.log("Detection Activated");
+  Alert.alert("Detección Activada");
   let location = await getLocN()
   console.log(location);
   let prevX, prevY, prevZ;
   let lastUpdate = 0;
   Accelerometer.addListener((accelerometerData) => {
+    
     let { x, y, z } = accelerometerData;
     let currTime = Date.now();
     if (currTime - lastUpdate > 100) {
@@ -55,6 +58,7 @@ const addListener = async (handler) => {
 };
 
 const removeListener = () => {
+  Alert.alert("Deteccion Desactivada")
   Accelerometer.removeAllListeners();
 };
 
@@ -208,7 +212,7 @@ const Detect = () => {
         x :{x.toFixed(4)} y:{y.toFixed(4)} z:{z.toFixed(4)}
       </Text> */}
 
-   <Switch
+   {/*<Switch
             style={styles.btnOnOFF}
             trackColor={{ false: "#767577", true: "#2b961f" }}
             thumbColor={subscription ? "#57b07a" : "#f4f3f4"}
@@ -223,7 +227,34 @@ const Detect = () => {
             }}
             value={subscription}
             
-          />
+          />*/}
+      {<AwesomeButton
+      
+          style={styles.btnOnOFF}
+          backgroundColor={subscription ? "#ff0000" : "#008000"}
+          width={60}
+          height={60}
+          borderRadius={200}
+          textSize={5.75}
+          title="Activar"
+
+
+          onPress={next=>{
+            setSubscription(!subscription)
+              if (subscription) {
+                removeListener();
+              } else {
+                addListener();
+              }
+              next()
+            }}
+            //value={subscription}
+          
+      >
+      Activar/Desactivar Detección
+          </AwesomeButton>}
+
+          
           {/* <Text style={{ fontSize: 40 }}>{subscription ? "ON" : "OFF"}</Text> */}
       {/* <TouchableOpacity
         style={styles.btnOnOFF}
@@ -249,7 +280,7 @@ const Detect = () => {
         <Text></Text>
       </View>
       <AwesomeButton 
-      backgroundColor="#57b07a"
+      backgroundColor="#ff0000"
       type="primary"
       width={250}
       textSize={30}
@@ -264,7 +295,7 @@ const Detect = () => {
         next();
       }}
       >
-        Submit Pothole
+        Reportar Bache
         </AwesomeButton>
       {/* <TouchableOpacity
         style={styles.button}
