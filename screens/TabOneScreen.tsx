@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
@@ -11,7 +12,9 @@ import Detect from "../components/Detect";
    
 
 export default function TabOneScreen() {
+  
   const image = { uri: "https://www.tranbc.ca/wp-content/uploads/2011/04/pothole-2.jpg" };
+  
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text> */}

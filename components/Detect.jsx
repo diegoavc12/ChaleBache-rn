@@ -15,7 +15,7 @@ import { Accelerometer } from "expo-sensors";
 import * as Location from "expo-location";
 import AwesomeButton from "react-native-really-awesome-button";
 import * as Device from 'expo-device';
-
+import Toast from 'react-native-toast-message';
 // Toast.show('This is a long toast.', Toast.LONG);
 const THRESHOLD = 140;
 
@@ -147,6 +147,28 @@ const postPotHole = async (location, type) => {
   }
 };
 
+const checkWarning= async (location) =>{
+  const R=6378;
+  const data= await fetchEvents();
+
+  data.forEach(pothole =>{
+    //Formula de Haversine para calcular distancia entre dos puntos geograficos en kilometros
+    var difLat=(Math.PI/180)*(location.coords.latitude-pothole.lat);
+    var difLng=(Math.PI/180)*(location.coords.longitude-pothole.lng);
+    var a=Math.pow(Math.sin(difLat),2)+Math.cos(location.coords.latitude)*Math.cos(pothole.lat)*Math.pow(Math.sin(difLng),2);
+    var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    var distancia=R*c*1000;
+    console.log("Distancia: "+distancia+" metros");
+    if((distancia)<=50){
+      console.log("Advertencia: Bache cercano");
+      Toast.show({
+        type: 'info',
+        text1: 'Advertencia: Bache cercano'
+      });
+    }  
+  });
+}
+
 const Detect = () => {
   const [subscription, setSubscription] = useState(false);
   const [location, setLocation] = useState(null);
@@ -170,6 +192,7 @@ const Detect = () => {
   }, []);
   setTimeout(() => {
     getLoc();
+    checkWarning(location);
   }, 5000);
 
   // const [data, setData] = useState({

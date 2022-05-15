@@ -36,6 +36,7 @@ const [data1, setdata] =useState([])
 const [baches, setbaches] = useState(0)
 
 
+
        useEffect(() => {
   const fetchEvents = async () => {
     const rawData = await fetch("https://chalebache-json-server.herokuapp.com/potholes");
