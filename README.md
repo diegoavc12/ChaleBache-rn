@@ -71,6 +71,9 @@ npm install --global expo-cli
    ```sh
    npm install
    ```
+   ```sh
+   npm install --save react-native-toast-message
+   ```
 
 ### Ho to run
 
