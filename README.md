@@ -65,7 +65,7 @@ npm install --global expo-cli
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/JMicalco/ChaleBache-rn.git
+   git clone https://github.com/diegoavc12/ChaleBache-rn.git
    ```
 2. Install NPM packages
    ```sh
