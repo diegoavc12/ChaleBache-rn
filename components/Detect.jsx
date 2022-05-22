@@ -47,7 +47,11 @@ const addListener = async (handler) => {
         (Math.abs(x + y + z - prevX - prevY - prevZ) / diffTime) * 10000;
       if (speed > THRESHOLD) {
         console.log("Pothole Detected!");
-        Alert.alert("Pothole Detected!");
+        //Alert.alert("Pothole Detected!");
+        Toast.show({
+          type: 'info',
+          text1: 'Bache Detectado'
+        });
         postPotHole(location, "Automatic");
       }
       prevX = x;
@@ -88,7 +92,7 @@ _retrieveData = async () => {
  }
 
 const postPotHole = async (location, type) => {
-  console.log("Sending Pothole UPADTE Request");
+  console.log("Sending Pothole UPDATE Request");
   const id =Device.brand+Device.manufacturer+Device.totalMemory;
   const potHoleLoc = location.coords;
   const potHoleDate = new Date();
@@ -158,7 +162,7 @@ const checkWarning= async (location) =>{
     var a=Math.pow(Math.sin(difLat),2)+Math.cos(location.coords.latitude)*Math.cos(pothole.lat)*Math.pow(Math.sin(difLng),2);
     var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
     var distancia=R*c*1000;
-    console.log("Distancia: "+distancia+" metros");
+    //console.log("Distancia: "+distancia+" metros");
     if((distancia)<=50){
       console.log("Advertencia: Bache cercano");
       Toast.show({
