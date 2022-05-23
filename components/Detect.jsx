@@ -48,11 +48,13 @@ const addListener = async (handler) => {
       if (speed > THRESHOLD) {
         console.log("Pothole Detected!");
         //Alert.alert("Pothole Detected!");
+        
         Toast.show({
           type: 'info',
           text1: 'Bache Detectado'
         });
         postPotHole(location, "Automatic");
+        
       }
       prevX = x;
       prevY = y;
@@ -92,7 +94,15 @@ _retrieveData = async () => {
  }
 
 const postPotHole = async (location, type) => {
-  console.log("Sending Pothole UPDATE Request");
+  var TooNear= await isTooNear(location);
+  console.log(TooNear);
+  if(TooNear==true){
+  Toast.show({
+    type: 'info',
+    text1: 'Bache ya reportado'
+    });
+  }else{
+    console.log("Sending Pothole UPDATE Request");
   const id =Device.brand+Device.manufacturer+Device.totalMemory;
   const potHoleLoc = location.coords;
   const potHoleDate = new Date();
@@ -149,21 +159,43 @@ const postPotHole = async (location, type) => {
    });
    console.log("Sent POST"); 
   }
+  }
+  
 };
 
-const checkWarning= async (location) =>{
+const getDistance=(location, pothole)=>{
   const R=6378;
-  const data= await fetchEvents();
+  //Formula de Haversine para calcular distancia entre dos puntos geograficos en kilometros
+  var difLat=(Math.PI/180)*(location.coords.latitude-pothole.lat);
+  var difLng=(Math.PI/180)*(location.coords.longitude-pothole.lng);
+  var a=Math.pow(Math.sin(difLat),2)+Math.cos(location.coords.latitude)*Math.cos(pothole.lat)*Math.pow(Math.sin(difLng),2);
+  var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  var distancia=R*c*1000;
+  //console.log("Distancia: "+distancia+" metros");
+  return distancia;
+  
+};
 
+const isTooNear=async (location)=>{
+  const data= await fetchEvents();
+  var found=false;
+  data.every(pothole =>{
+    var distance=getDistance(location,pothole);
+    console.log("Distancia: "+distance+" metros");
+    if((distance)<=10){
+      found=true;
+      return false;
+    }
+    return true;
+  });
+  return found;
+}
+
+const checkWarning= async (location) =>{
+  const data= await fetchEvents();
   data.forEach(pothole =>{
-    //Formula de Haversine para calcular distancia entre dos puntos geograficos en kilometros
-    var difLat=(Math.PI/180)*(location.coords.latitude-pothole.lat);
-    var difLng=(Math.PI/180)*(location.coords.longitude-pothole.lng);
-    var a=Math.pow(Math.sin(difLat),2)+Math.cos(location.coords.latitude)*Math.cos(pothole.lat)*Math.pow(Math.sin(difLng),2);
-    var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-    var distancia=R*c*1000;
-    //console.log("Distancia: "+distancia+" metros");
-    if((distancia)<=50){
+    var distance= getDistance(location,pothole);
+    if((distance)<=50){
       console.log("Advertencia: Bache cercano");
       Toast.show({
         type: 'info',
