@@ -289,14 +289,16 @@ const Detect = () => {
           />*/}
       {<AwesomeButton
       
-          style={styles.btnOnOFF}
+      
+          style={{marginTop:200}}
           backgroundColor={subscription ? "#ff0000" : "#008000"}
-          width={60}
-          height={60}
+          type="primary"
+          width={300}
+          height={300}
           borderRadius={200}
-          textSize={5.75}
+          textSize={20}
           title="Activar"
-
+          
 
           onPress={next=>{
             setSubscription(!subscription)
@@ -339,11 +341,10 @@ const Detect = () => {
         <Text></Text>
       </View>
       <AwesomeButton 
+      style={{marginBottom:0}}
       backgroundColor="#ff0000"
-      type="primary"
       width={250}
       textSize={30}
-      style={styles.button}
             onPress={next => {
               postPotHole(location, "Manual");
           // _storeData();

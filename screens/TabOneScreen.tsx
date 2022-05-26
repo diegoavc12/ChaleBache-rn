@@ -29,8 +29,8 @@ export default function TabOneScreen() {
         
           
 
-          <View style={{ backgroundColor: "white",borderWidth: 5, bottom:100, height:150}}>
-          <Text style={{fontSize:18, padding: 10}}>
+          <View style={{ backgroundColor: "white",borderWidth: 5, bottom:100, height:150, marginBottom:-300}}>
+          <Text style={{textAlign: "center", fontSize:18, padding: 10,position:"relative", color:"#000000"}}>
             Bienvenido a la app de ChaleBache. Utilice el botón redondo para activar la detección
             automática de baches o presione el botón "Reportar Bache" para notificar que hay un bache en 
             su ubicación actual. 
