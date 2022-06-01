@@ -18,6 +18,8 @@ import * as Device from 'expo-device';
 import Toast from 'react-native-toast-message';
 // Toast.show('This is a long toast.', Toast.LONG);
 const THRESHOLD = 140;
+var prevLat=0;
+var prevLng=0;
 
 const getLocN = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -176,13 +178,15 @@ const getDistance=(location, pothole)=>{
   
 };
 
+
+
 const isTooNear=async (location)=>{
   const data= await fetchEvents();
   var found=false;
   data.every(pothole =>{
     var distance=getDistance(location,pothole);
     console.log("Distancia: "+distance+" metros");
-    if((distance)<=10){
+    if((distance)<=50){
       found=true;
       return false;
     }
@@ -194,13 +198,17 @@ const isTooNear=async (location)=>{
 const checkWarning= async (location) =>{
   const data= await fetchEvents();
   data.forEach(pothole =>{
-    var distance= getDistance(location,pothole);
+    var distance= getDistance(location, pothole);
     if((distance)<=50){
-      console.log("Advertencia: Bache cercano");
-      Toast.show({
-        type: 'info',
-        text1: 'Advertencia: Bache cercano'
-      });
+      if(prevLat!=pothole.lat || prevLng!=pothole.lng){
+        console.log("Advertencia: Bache cercano");
+        Toast.show({
+          type: 'info',
+          text1: 'Advertencia: Bache cercano'
+        });
+      }
+      prevLat=pothole.lat;
+      prevLng=pothole.lng;
     }  
   });
 }
@@ -229,6 +237,8 @@ const Detect = () => {
   setTimeout(() => {
     getLoc();
     checkWarning(location);
+    
+    
   }, 5000);
 
   // const [data, setData] = useState({
