@@ -29,7 +29,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             screens: {
               TabThreeScreen: 'three',
             },
-          }, 
+          },
         },
       },
       Modal: 'modal',

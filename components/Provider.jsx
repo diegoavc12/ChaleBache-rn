@@ -14,5 +14,6 @@ export const BacheProvider = ({children})=>{
     return (
         <BacheContext.Provider value={value}>
             {children}
-        </BacheContext.Provider>)
-    }
+        </BacheContext.Provider>
+    )
+}

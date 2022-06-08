@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Loc from "../components/Loc";
 
@@ -11,12 +9,11 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to ChaleBache</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      {/* <EditScreenInfo path="/screens/ModalScreen.tsx" /> */}
       <View>
         <Text>
           Localization: WORKING!
         </Text>
-        <Loc/>
+        <Loc />
       </View>
 
 
